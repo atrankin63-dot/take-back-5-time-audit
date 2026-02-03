@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Take Back 5">
+    <meta name="theme-color" content="#1a365d">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjQwIiBmaWxsPSIjMWEzNjVkIi8+PHRleHQgeD0iOTAiIHk9IjEwNSIgZm9udC1mYW1pbHk9Ii1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNzAiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5UQjU8L3RleHQ+PC9zdmc+">
+    <title>Take Back 5 - Time Audit</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            color: #2d3748;
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Prevent text selection on interactive elements */
+        button, .day-tab, .view-tab, .location-btn, .rating-btn, .duration-btn, .hour-header {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Touch feedback for all tappable elements */
+        button, .day-tab, .view-tab, .location-btn, .rating-btn, .duration-btn, .hour-header, .category-row {
+            transition: all 0.2s, transform 0.1s;
+        }
+        button:active, .day-tab:active, .view-tab:active, .location-btn:active, 
+        .rating-btn:active, .duration-btn:active, .hour-header:active, .category-row:active {
+            transform: scale(0.97);
+            opacity: 0.85;
+        }
+
+        /* Save indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #276749;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .save-indicator.visible {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        /* Persistent save status bar */
+        .save-status {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #a0aec0;
+            padding: 6px 0;
+            margin-bottom: 8px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 24px 16px;
+            background: linear-gradient(135deg, #1a365d 0%, #2d4a6f 100%);
+            color: white;
+            margin: -16px -16px 20px -16px;
+        }
+        
+        header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        /* Day Tabs */
+        .day-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .day-tab {
+            flex: 1;
+            padding: 12px 8px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.2s;
+            text-align: center;
+            position: relative;
+        }
+        
+        .day-tab:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+        
+        .day-tab.active {
+            border-color: #3182ce;
+            background: #ebf8ff;
+            color: #2c5282;
+        }
+        
+        .day-tab.has-data::after {
+            content: '✓';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #48bb78;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* View Tabs */
+        .view-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 10px;
+        }
+        
+        .view-tab {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            color: #4a5568;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .view-tab:hover {
+            color: #2d3748;
+        }
+        
+        .view-tab.active {
+            background: white;
+            color: #2d3748;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Progress */
+        .progress-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-text {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 6px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background: #ebf8ff;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3182ce;
+        }
+        
+        .instructions h3 {
+            color: #2c5282;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+        
+        .instructions p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* Work Times Section */
+        .work-times-section {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .work-times-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .work-time-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .work-time-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .work-time-select {
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2d3748;
+            background: white;
+            cursor: pointer;
+            min-width: 100px;
+        }
+        
+        .work-time-select:focus {
+            outline: none;
+            border-color: #3182ce;
+        }
+        
+        .location-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .location-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .location-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .location-btn {
+            padding: 6px 14px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #4a5568;
+            transition: all 0.2s;
+        }
+        
+        .location-btn:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+        
+        .location-btn.selected {
+            background: #3182ce;
+            border-color: #3182ce;
+            color: white;
+        }
+        
+        /* Hour Block */
+        .hour-block {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        .hour-block.has-entries {
+            border-color: #48bb78;
+        }
+        
+        .hour-block.dimmed {
+            opacity: 0.4;
+        }
+        
+        .hour-block.dimmed .hour-header {
+            background: #edf2f7;
+        }
+        
+        .hour-header {
+            background: #f7fafc;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .hour-block.has-entries .hour-header {
+            background: #f0fff4;
+        }
+        
+        .hour-time {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        .hour-summary {
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: right;
+            max-width: 60%;
+        }
+        
+        .hour-block.has-entries .hour-summary {
+            color: #276749;
+        }
+        
+        .hour-block.dimmed .hour-summary {
+            color: #a0aec0;
+        }
+        
+        .hour-content {
+            padding: 16px;
+            display: none;
+        }
+        
+        .hour-block.expanded .hour-content {
+            display: block;
+        }
+        
+        .hour-header .expand-icon {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            transition: transform 0.2s;
+        }
+        
+        .hour-block.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Rating Row */
+        .rating-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .rating-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rating-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #2d3748;
+            min-width: 55px;
+        }
+        
+        .rating-buttons {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .rating-btn {
+            padding: 6px 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #4a5568;
+            transition: all 0.2s;
+        }
+        
+        .rating-btn:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+        
+        .rating-btn.selected.high, .rating-btn.selected.strong {
+            background: #48bb78;
+            border-color: #48bb78;
+            color: white;
+        }
+        
+        .rating-btn.selected.medium, .rating-btn.selected.med {
+            background: #ed8936;
+            border-color: #ed8936;
+            color: white;
+        }
+        
+        .rating-btn.selected.low, .rating-btn.selected.poor {
+            background: #e53e3e;
+            border-color: #e53e3e;
+            color: white;
+        }
+        
+        /* Category List */
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .category-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .category-row:hover {
+            background: #edf2f7;
+        }
+        
+        .category-row.has-entry {
+            background: #ebf8ff;
+            border-color: #3182ce;
+        }
+        
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-icon {
+            font-size: 1.1rem;
+            width: 28px;
+            text-align: center;
+        }
+        
+        .category-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .category-row.visible-leadership .category-name {
+            color: #276749;
+        }
+        
+        .duration-buttons {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .duration-btn {
+            padding: 6px 10px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.2s;
+            min-width: 36px;
+        }
+        
+        .duration-btn:hover {
+            border-color: #3182ce;
+            color: #3182ce;
+            background: #ebf8ff;
+        }
+        
+        .duration-btn.selected {
+            background: #3182ce;
+            border-color: #3182ce;
+            color: white;
+        }
+        
+        .duration-btn.disabled-btn {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .duration-btn.disabled-btn:hover {
+            border-color: #cbd5e0;
+            color: #4a5568;
+            background: white;
+        }
+        
+        /* Logged Entries */
+        .logged-entries {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .logged-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #718096;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .entry-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f0fff4;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border: 1px solid #c6f6d5;
+        }
+        
+        .entry-text {
+            font-size: 0.85rem;
+            color: #276749;
+            font-weight: 500;
+        }
+        
+        .entry-remove {
+            background: #fc8181;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        
+        .entry-remove:hover {
+            background: #e53e3e;
+        }
+        
+        .time-remaining {
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: right;
+            margin-top: 8px;
+        }
+        
+        .time-remaining.full {
+            color: #e53e3e;
+        }
+        
+        /* Summary View */
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+        
+        .stat-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            padding: 20px 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-card.total {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+        }
+        
+        .stat-card.visible {
+            background: linear-gradient(135deg, #48bb78 0%, #2f855a 100%);
+            color: white;
+        }
+        
+        .stat-card h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+        
+        .stat-card .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        /* Reflection Prompt Box */
+        .reflection-prompt-box {
+            background: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+            color: white;
+            text-align: center;
+        }
+        
+        .reflection-prompt-box h3 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        
+        .reflection-prompt-box p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+        
+        .reflection-prompt-box button {
+            padding: 12px 24px;
+            background: white;
+            color: #6b46c1;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .reflection-prompt-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* Chart */
+        .chart-section {
+            margin-bottom: 24px;
+        }
+        
+        .chart-bar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .chart-label {
+            width: 130px;
+            font-size: 0.8rem;
+            color: #4a5568;
+            text-align: right;
+            padding-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .chart-bar-container {
+            flex: 1;
+            height: 28px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3182ce, #4299e1);
+            border-radius: 6px;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            min-width: fit-content;
+        }
+        
+        .chart-bar-fill.visible-leadership {
+            background: linear-gradient(90deg, #48bb78, #68d391);
+        }
+        
+        .chart-value {
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 700;
+        }
+        
+        /* Summary Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #3182ce;
+        }
+        
+        .summary-item.visible-leadership {
+            border-left-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        .summary-category {
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+        
+        .summary-hours {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+        }
+        
+        .btn-danger {
+            padding: 12px 24px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-danger:hover {
+            background: #c53030;
+        }
+        
+        /* Reflection View */
+        .reflection-prompt {
+            margin-bottom: 24px;
+        }
+        
+        .reflection-prompt label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #2d3748;
+            line-height: 1.4;
+        }
+        
+        .reflection-prompt textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.2s;
+        }
+        
+        .reflection-prompt textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Mobile adjustments - iPhone optimised */
+        @media (max-width: 500px) {
+            .container {
+                padding: 12px;
+            }
+            
+            header {
+                margin: -12px -12px 16px -12px;
+                padding: 20px 12px;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            /* Day tabs - minimum 44px tap height */
+            .day-tab {
+                padding: 12px 4px;
+                font-size: 0.85rem;
+                min-height: 44px;
+            }
+            
+            /* View tabs - minimum 44px */
+            .view-tab {
+                min-height: 44px;
+                font-size: 0.85rem;
+            }
+            
+            .work-times-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            /* Selects - 44px min height for iOS native pickers */
+            .work-time-select {
+                min-height: 44px;
+                font-size: 1rem;
+            }
+            
+            .location-row {
+                flex-wrap: wrap;
+            }
+            
+            /* Location buttons - 44px min */
+            .location-btn {
+                padding: 10px 16px;
+                min-height: 44px;
+                font-size: 0.85rem;
+            }
+            
+            .rating-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .rating-group {
+                width: 100%;
+            }
+            
+            .rating-buttons {
+                flex: 1;
+                justify-content: flex-end;
+            }
+            
+            /* Rating buttons - 44px min */
+            .rating-btn {
+                padding: 10px 14px;
+                min-height: 44px;
+                font-size: 0.85rem;
+            }
+            
+            /* Hour headers - 44px min */
+            .hour-header {
+                padding: 14px 16px;
+                min-height: 50px;
+            }
+            
+            .category-name {
+                font-size: 0.85rem;
+            }
+            
+            /* Duration buttons - 44px min tap target */
+            .duration-btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+                min-width: 44px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            /* Category rows need adequate height */
+            .category-row {
+                padding: 10px 12px;
+                min-height: 50px;
+            }
+            
+            /* Entry remove button - 44px tap target */
+            .entry-remove {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+            
+            .chart-label {
+                width: 100px;
+                font-size: 0.75rem;
+            }
+            
+            .stat-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Reflection textareas - comfortable for thumbs */
+            .reflection-prompt textarea {
+                font-size: 1rem;
+                min-height: 120px;
+                padding: 14px;
+            }
+            
+            .reflection-prompt label {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+            
+            /* Export buttons full-width on mobile */
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn-primary, .btn-danger {
+                width: 100%;
+                min-height: 50px;
+                justify-content: center;
+                text-align: center;
+                font-size: 1rem;
+            }
+            
+            /* Instructions slightly larger on mobile */
+            .instructions p {
+                font-size: 0.95rem;
+            }
+        }
+        
+        /* iPhone SE specific (375px) */
+        @media (max-width: 375px) {
+            .duration-btn {
+                padding: 10px 10px;
+                min-width: 40px;
+                font-size: 0.75rem;
+            }
+            
+            .category-name {
+                font-size: 0.8rem;
+            }
+            
+            .chart-label {
+                width: 85px;
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* Standalone mode (added to home screen) */
+        @media (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+            }
+            header {
+                padding-top: calc(env(safe-area-inset-top) + 16px);
+            }
+        }
+        
+        /* Export success overlay */
+        .export-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .export-overlay.visible {
+            display: flex;
+        }
+        .export-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 24px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .export-modal .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        .export-modal h3 {
+            font-size: 1.2rem;
+            color: #1a365d;
+            margin-bottom: 12px;
+        }
+        .export-modal p {
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        .export-modal .step-list {
+            text-align: left;
+            margin: 16px 0;
+            padding: 0;
+            list-style: none;
+        }
+        .export-modal .step-list li {
+            padding: 8px 0;
+            font-size: 0.9rem;
+            color: #2d3748;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .export-modal .step-list li:last-child {
+            border-bottom: none;
+        }
+        .export-modal .step-num {
+            background: #3182ce;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .export-modal .modal-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+            min-height: 50px;
+        }
+        .export-modal .modal-btn-primary {
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: white;
+            margin-bottom: 8px;
+        }
+        .export-modal .modal-btn-secondary {
+            background: #edf2f7;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Take Back 5</h1>
+            <p>Time Audit for School Leaders</p>
+        </header>
+        
+        <!-- Save indicator toast -->
+        <div class="save-indicator" id="save-indicator">✓ Saved</div>
+        
+        <!-- Save status -->
+        <div class="save-status" id="save-status">Data saves automatically</div>
+        
+        <!-- View Toggle -->
+        <div class="view-tabs">
+            <button class="view-tab active" onclick="showView('log')">📝 Log Time</button>
+            <button class="view-tab" onclick="showView('summary')">📈 Summary</button>
+            <button class="view-tab" onclick="showView('reflection')">💭 Reflect</button>
+        </div>
+        
+        <!-- LOG VIEW -->
+        <div id="log-view">
+            <div class="card">
+                <div class="instructions">
+                    <h3>How to use this audit</h3>
+                    <p>Set your start and stop work times, then log what you did each hour. Track for 5 days. The patterns matter more than perfect accuracy.</p>
+                </div>
+                
+                <!-- Day Tabs -->
+                <div class="day-tabs" id="day-tabs">
+                    <button class="day-tab active" onclick="selectDay(0)">Mon</button>
+                    <button class="day-tab" onclick="selectDay(1)">Tue</button>
+                    <button class="day-tab" onclick="selectDay(2)">Wed</button>
+                    <button class="day-tab" onclick="selectDay(3)">Thu</button>
+                    <button class="day-tab" onclick="selectDay(4)">Fri</button>
+                </div>
+                
+                <!-- Progress -->
+                <div class="progress-container">
+                    <div class="progress-text" id="progress-text">Day 1 of 5</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+                    </div>
+                </div>
+                
+                <!-- Work Times Section -->
+                <div class="work-times-section">
+                    <div class="work-times-row">
+                        <div class="work-time-group">
+                            <span class="work-time-label">Started work:</span>
+                            <select class="work-time-select" id="start-time-select" onchange="setWorkTime('start')">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+                        <div class="work-time-group">
+                            <span class="work-time-label">Stopped work:</span>
+                            <select class="work-time-select" id="stop-time-select" onchange="setWorkTime('stop')">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="location-row">
+                        <span class="location-label">📍 Location:</span>
+                        <div class="location-buttons">
+                            <button class="location-btn" onclick="setLocation('home')">Home</button>
+                            <button class="location-btn" onclick="setLocation('school')">School</button>
+                            <button class="location-btn" onclick="setLocation('other')">Other</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hour Blocks -->
+                <div id="hour-blocks"></div>
+            </div>
+        </div>
+        
+        <!-- SUMMARY VIEW -->
+        <div id="summary-view" class="hidden">
+            <div class="card">
+                <h2 class="summary-title">Your Week at a Glance</h2>
+                
+                <div class="stat-cards">
+                    <div class="stat-card total">
+                        <h4>Total Hours Logged</h4>
+                        <div class="stat-number" id="total-hours">0</div>
+                    </div>
+                    <div class="stat-card visible">
+                        <h4>Visible Leadership</h4>
+                        <div class="stat-number" id="vl-hours">0</div>
+                    </div>
+                </div>
+                
+                <!-- Reflection Prompt (shown after 3+ days) -->
+                <div class="reflection-prompt-box hidden" id="reflection-prompt-box">
+                    <h3>📊 You've logged 3+ days of data</h3>
+                    <p>Ready to make sense of what you're seeing? Take 10 minutes to reflect on the patterns.</p>
+                    <button onclick="showView('reflection')">💭 Complete Your Reflection</button>
+                </div>
+                
+                <div class="chart-section">
+                    <h3 class="summary-title">Where Your Time Went</h3>
+                    <div id="chart-container"></div>
+                </div>
+                
+                <div>
+                    <h3 class="summary-title">Hours by Category</h3>
+                    <div class="summary-grid" id="summary-grid"></div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="smartExport()">📤 Export Report</button>
+                    <button class="btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- REFLECTION VIEW -->
+        <div id="reflection-view" class="hidden">
+            <div class="card">
+                <h2 class="summary-title">End of Week Reflection</h2>
+                
+                <div class="instructions">
+                    <h3>Before you reflect</h3>
+                    <p>Review your summary data first. Be honest with yourself – this audit is for your benefit, not anyone else's.</p>
+                </div>
+                
+                <div class="reflection-prompt">
+                    <label>1. What surprised you about where your time went?</label>
+                    <textarea id="reflection-1" placeholder="I was surprised that..." oninput="saveReflections()"></textarea>
+                </div>
+                
+                <div class="reflection-prompt">
+                    <label>2. Where did you lose time you didn't expect?</label>
+                    <textarea id="reflection-2" placeholder="I lost time to..." oninput="saveReflections()"></textarea>
+                </div>
+                
+                <div class="reflection-prompt">
+                    <label>3. What did you NOT get to that you wished you had?</label>
+                    <textarea id="reflection-3" placeholder="I wish I had time for..." oninput="saveReflections()"></textarea>
+                </div>
+                
+                <div class="reflection-prompt">
+                    <label>4. How much time did you spend in visible leadership (classroom visits, playground, gate, staff room combined)? Is this enough?</label>
+                    <textarea id="reflection-4" placeholder="My visible leadership time was..." oninput="saveReflections()"></textarea>
+                </div>
+                
+                <div class="reflection-prompt">
+                    <label>5. What energised you this week? What drained you?</label>
+                    <textarea id="reflection-5" placeholder="I felt energised by... I felt drained by..." oninput="saveReflections()"></textarea>
+                </div>
+                
+                <div class="reflection-prompt">
+                    <label>6. If you could claw back 5 hours, where would they come from?</label>
+                    <textarea id="reflection-6" placeholder="I would take time back from..." oninput="saveReflections()"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="smartExport()">📤 Export Full Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Export success overlay -->
+    <div class="export-overlay" id="export-overlay">
+        <div class="export-modal">
+            <div class="modal-icon" id="export-modal-icon">✅</div>
+            <h3 id="export-modal-title">Report Copied!</h3>
+            <p id="export-modal-subtitle">Your time audit report is on your clipboard. Here's what to do next:</p>
+            <ol class="step-list" id="export-modal-steps">
+                <li><span class="step-num">1</span><span>Open your <strong>email app</strong> or <strong>Notes</strong></span></li>
+                <li><span class="step-num">2</span><span>Tap where you want the report, then <strong>hold and tap "Paste"</strong></span></li>
+                <li><span class="step-num">3</span><span>Send it to your coach or save it for your records</span></li>
+            </ol>
+            <button class="modal-btn modal-btn-primary" onclick="closeExportOverlay()">Got it</button>
+            <button class="modal-btn modal-btn-secondary" id="export-try-share-btn" onclick="tryShareFromModal()" style="display:none;">Try Share Sheet Instead</button>
+        </div>
+    </div>
+    
+    <script>
+        // Categories in priority order
+        const categories = [
+            { id: 'email', name: 'Email & Inbox', icon: '📧' },
+            { id: 'meetings', name: 'Meetings', icon: '👥' },
+            { id: 'communications', name: 'Communications', icon: '📝' },
+            { id: 'compliance', name: 'Compliance & Reporting', icon: '📋' },
+            { id: 'operational', name: 'Operational/Reactive', icon: '🔥' },
+            { id: 'parent-community', name: 'Parent/Community', icon: '👨‍👩‍👧' },
+            { id: 'staff-coaching', name: 'Staff Coaching', icon: '💬' },
+            { id: 'classroom', name: 'Classroom Visits', icon: '🏫', visible: true },
+            { id: 'playground', name: 'Playground & Gate', icon: '🚸', visible: true },
+            { id: 'staffroom', name: 'Staff Room', icon: '☕', visible: true },
+            { id: 'strategic', name: 'Strategic/Thinking', icon: '🎯' },
+            { id: 'personal', name: 'Personal', icon: '🧘' }
+        ];
+        
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const hours = [];
+        for (let h = 6; h <= 18; h++) {
+            const hour12 = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            hours.push({ value: h, label: `${hour12}:00 ${ampm}` });
+        }
+        
+        let currentDay = 0;
+        let expandedHour = null;
+        let data = loadData();
+        
+        function loadData() {
+            const saved = localStorage.getItem('takeBack5TimeAudit');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // Ensure all required objects exist
+                return {
+                    entries: parsed.entries || {},
+                    energy: parsed.energy || {},
+                    focus: parsed.focus || {},
+                    workTimes: parsed.workTimes || {},
+                    locations: parsed.locations || {},
+                    reflections: parsed.reflections || {}
+                };
+            }
+            return {
+                entries: {},
+                energy: {},
+                focus: {},
+                workTimes: {},
+                locations: {},
+                reflections: {}
+            };
+        }
+        
+        function saveData() {
+            localStorage.setItem('takeBack5TimeAudit', JSON.stringify(data));
+            updateDayTabs();
+            showSaveIndicator();
+        }
+        
+        function showSaveIndicator() {
+            const indicator = document.getElementById('save-indicator');
+            const status = document.getElementById('save-status');
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+            
+            // Update persistent status
+            status.textContent = `✓ Last saved: ${timeStr}`;
+            
+            // Flash toast
+            indicator.textContent = '✓ Saved';
+            indicator.classList.add('visible');
+            clearTimeout(window._saveToastTimer);
+            window._saveToastTimer = setTimeout(() => {
+                indicator.classList.remove('visible');
+            }, 1500);
+        }
+        
+        function initWorkTimeSelects() {
+            const startSelect = document.getElementById('start-time-select');
+            const stopSelect = document.getElementById('stop-time-select');
+            
+            // Clear existing options except placeholder
+            startSelect.innerHTML = '<option value="">-- Select --</option>';
+            stopSelect.innerHTML = '<option value="">-- Select --</option>';
+            
+            // Add time options with 15-minute increments
+            for (let h = 5; h <= 20; h++) {
+                for (let m = 0; m < 60; m += 15) {
+                    const hour12 = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+                    const ampm = h >= 12 ? 'PM' : 'AM';
+                    const mins = m === 0 ? '00' : m.toString();
+                    const label = `${hour12}:${mins} ${ampm}`;
+                    const value = h + (m / 60);
+                    
+                    startSelect.innerHTML += `<option value="${value}">${label}</option>`;
+                    stopSelect.innerHTML += `<option value="${value}">${label}</option>`;
+                }
+            }
+        }
+        
+        function selectDay(dayIndex) {
+            currentDay = dayIndex;
+            expandedHour = null;
+            document.querySelectorAll('#day-tabs .day-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === dayIndex);
+            });
+            document.getElementById('progress-text').textContent = `Day ${dayIndex + 1} of 5`;
+            document.getElementById('progress-fill').style.width = `${(dayIndex + 1) * 20}%`;
+            
+            // Update work times UI
+            updateWorkTimesUI();
+            renderHourBlocks();
+        }
+        
+        function updateWorkTimesUI() {
+            const dayKey = `day-${currentDay}`;
+            
+            // Ensure workTimes and locations objects exist
+            if (!data.workTimes) data.workTimes = {};
+            if (!data.locations) data.locations = {};
+            
+            const startTime = data.workTimes[`${dayKey}-start`];
+            const stopTime = data.workTimes[`${dayKey}-stop`];
+            const location = data.locations[dayKey] || '';
+            
+            document.getElementById('start-time-select').value = startTime !== undefined ? startTime : '';
+            document.getElementById('stop-time-select').value = stopTime !== undefined ? stopTime : '';
+            
+            // Update location buttons
+            document.querySelectorAll('.location-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.textContent.toLowerCase() === location);
+            });
+        }
+        
+        function setWorkTime(type) {
+            const dayKey = `day-${currentDay}`;
+            const value = document.getElementById(`${type}-time-select`).value;
+            
+            if (value) {
+                data.workTimes[`${dayKey}-${type}`] = parseFloat(value);
+            } else {
+                delete data.workTimes[`${dayKey}-${type}`];
+            }
+            
+            saveData();
+            renderHourBlocks();
+        }
+        
+        function setLocation(location) {
+            const dayKey = `day-${currentDay}`;
+            
+            // Toggle - if already selected, deselect
+            if (data.locations[dayKey] === location) {
+                delete data.locations[dayKey];
+            } else {
+                data.locations[dayKey] = location;
+            }
+            
+            saveData();
+            updateWorkTimesUI();
+        }
+        
+        function updateDayTabs() {
+            document.querySelectorAll('#day-tabs .day-tab').forEach((tab, i) => {
+                const dayKey = `day-${i}`;
+                const hasData = Object.keys(data.entries).some(key => key.startsWith(dayKey));
+                tab.classList.toggle('has-data', hasData);
+            });
+        }
+        
+        function toggleHourBlock(hourValue) {
+            expandedHour = expandedHour === hourValue ? null : hourValue;
+            renderHourBlocks();
+            
+            // Smooth scroll to expanded block on mobile
+            if (expandedHour !== null) {
+                requestAnimationFrame(() => {
+                    const expanded = document.querySelector('.hour-block.expanded');
+                    if (expanded) {
+                        expanded.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+        }
+        
+        function isHourInWorkingRange(hourValue) {
+            return getAvailableMinutes(hourValue) > 0;
+        }
+        
+        function getAvailableMinutes(hourValue) {
+            const dayKey = `day-${currentDay}`;
+            
+            // Ensure workTimes exists
+            if (!data.workTimes) data.workTimes = {};
+            
+            const startTime = data.workTimes[`${dayKey}-start`];
+            const stopTime = data.workTimes[`${dayKey}-stop`];
+            
+            // If no work times set, full hour available
+            if (startTime === undefined && stopTime === undefined) return 60;
+            
+            const hourStart = hourValue;
+            const hourEnd = hourValue + 1;
+            
+            // Completely outside work hours
+            if (startTime !== undefined && hourEnd <= startTime) return 0;
+            if (stopTime !== undefined && hourStart >= stopTime) return 0;
+            
+            // Calculate available minutes within this hour
+            let availableStart = hourStart;
+            let availableEnd = hourEnd;
+            
+            // If start time is within this hour, adjust start
+            if (startTime !== undefined && startTime > hourStart && startTime < hourEnd) {
+                availableStart = startTime;
+            }
+            
+            // If stop time is within this hour, adjust end
+            if (stopTime !== undefined && stopTime > hourStart && stopTime < hourEnd) {
+                availableEnd = stopTime;
+            }
+            
+            // Convert to minutes
+            return Math.round((availableEnd - availableStart) * 60);
+        }
+        
+        function renderHourBlocks() {
+            const container = document.getElementById('hour-blocks');
+            container.innerHTML = '';
+            
+            hours.forEach(hour => {
+                const blockKey = `day-${currentDay}-hour-${hour.value}`;
+                const entries = data.entries[blockKey] || [];
+                const energy = data.energy[blockKey] || null;
+                const focus = data.focus[blockKey] || null;
+                const isExpanded = expandedHour === hour.value;
+                const totalLogged = entries.reduce((sum, e) => sum + e.duration, 0);
+                const availableMinutes = getAvailableMinutes(hour.value);
+                const isInRange = availableMinutes > 0;
+                const availableHours = availableMinutes / 60;
+                
+                let summaryText;
+                if (!isInRange) {
+                    summaryText = 'Outside work hours';
+                } else if (entries.length > 0) {
+                    summaryText = entries.map(e => `${formatDuration(e.duration)} ${getCategoryName(e.category)}`).join(', ');
+                } else if (availableMinutes < 60) {
+                    summaryText = `Tap to log (${availableMinutes}m available)`;
+                } else {
+                    summaryText = 'Tap to log';
+                }
+                
+                // Calculate remaining time in this block
+                const remainingHours = availableHours - totalLogged;
+                const remainingMinutes = Math.round(remainingHours * 60);
+                
+                const block = document.createElement('div');
+                block.className = `hour-block ${entries.length > 0 ? 'has-entries' : ''} ${isExpanded ? 'expanded' : ''} ${!isInRange ? 'dimmed' : ''}`;
+                
+                block.innerHTML = `
+                    <div class="hour-header" onclick="toggleHourBlock(${hour.value})">
+                        <span class="hour-time">${hour.label}${availableMinutes > 0 && availableMinutes < 60 ? ` <small style="color:#718096; font-weight:normal;">(${availableMinutes}m)</small>` : ''}</span>
+                        <span class="hour-summary">${summaryText}</span>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="hour-content">
+                        <div class="rating-row">
+                            <div class="rating-group">
+                                <span class="rating-label">Energy:</span>
+                                <div class="rating-buttons">
+                                    <button class="rating-btn ${energy === 'high' ? 'selected high' : ''}" onclick="setEnergy('${blockKey}', 'high')">High</button>
+                                    <button class="rating-btn ${energy === 'medium' ? 'selected medium' : ''}" onclick="setEnergy('${blockKey}', 'medium')">Medium</button>
+                                    <button class="rating-btn ${energy === 'low' ? 'selected low' : ''}" onclick="setEnergy('${blockKey}', 'low')">Low</button>
+                                </div>
+                            </div>
+                            <div class="rating-group">
+                                <span class="rating-label">Focus:</span>
+                                <div class="rating-buttons">
+                                    <button class="rating-btn ${focus === 'strong' ? 'selected strong' : ''}" onclick="setFocus('${blockKey}', 'strong')">Strong</button>
+                                    <button class="rating-btn ${focus === 'med' ? 'selected med' : ''}" onclick="setFocus('${blockKey}', 'med')">Medium</button>
+                                    <button class="rating-btn ${focus === 'poor' ? 'selected poor' : ''}" onclick="setFocus('${blockKey}', 'poor')">Poor</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="category-list">
+                            ${categories.map(cat => {
+                                const catEntry = entries.find(e => e.category === cat.id);
+                                const catEntryDuration = catEntry ? catEntry.duration : 0;
+                                
+                                // Calculate what's available for each duration button
+                                const otherEntriesTotal = entries.filter(e => e.category !== cat.id).reduce((sum, e) => sum + e.duration, 0);
+                                const maxAvailableForThis = availableHours - otherEntriesTotal;
+                                
+                                // Determine which buttons should be disabled
+                                const can15m = maxAvailableForThis >= 0.25 || catEntryDuration === 0.25;
+                                const can30m = maxAvailableForThis >= 0.5 || catEntryDuration === 0.5;
+                                const can1hr = maxAvailableForThis >= 1 || catEntryDuration === 1;
+                                
+                                // Also check if duration exceeds available time in block
+                                const block15mAllowed = availableMinutes >= 15;
+                                const block30mAllowed = availableMinutes >= 30;
+                                const block1hrAllowed = availableMinutes >= 60;
+                                
+                                return `
+                                    <div class="category-row ${catEntry ? 'has-entry' : ''} ${cat.visible ? 'visible-leadership' : ''}">
+                                        <div class="category-info">
+                                            <span class="category-icon">${cat.icon}</span>
+                                            <span class="category-name">${cat.name}</span>
+                                        </div>
+                                        <div class="duration-buttons">
+                                            <button class="duration-btn ${catEntry?.duration === 0.25 ? 'selected' : ''} ${(!can15m || !block15mAllowed) && catEntryDuration !== 0.25 ? 'disabled-btn' : ''}" 
+                                                onclick="toggleEntry('${blockKey}', '${cat.id}', 0.25, ${availableHours})"
+                                                ${(!can15m || !block15mAllowed) && catEntryDuration !== 0.25 ? 'disabled' : ''}>15m</button>
+                                            <button class="duration-btn ${catEntry?.duration === 0.5 ? 'selected' : ''} ${(!can30m || !block30mAllowed) && catEntryDuration !== 0.5 ? 'disabled-btn' : ''}" 
+                                                onclick="toggleEntry('${blockKey}', '${cat.id}', 0.5, ${availableHours})"
+                                                ${(!can30m || !block30mAllowed) && catEntryDuration !== 0.5 ? 'disabled' : ''}>30m</button>
+                                            <button class="duration-btn ${catEntry?.duration === 1 ? 'selected' : ''} ${(!can1hr || !block1hrAllowed) && catEntryDuration !== 1 ? 'disabled-btn' : ''}" 
+                                                onclick="toggleEntry('${blockKey}', '${cat.id}', 1, ${availableHours})"
+                                                ${(!can1hr || !block1hrAllowed) && catEntryDuration !== 1 ? 'disabled' : ''}>1hr</button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        ${entries.length > 0 ? `
+                            <div class="logged-entries">
+                                <div class="logged-title">Logged This Hour</div>
+                                ${entries.map((entry, index) => `
+                                    <div class="entry-item">
+                                        <span class="entry-text">${getCategoryIcon(entry.category)} ${getCategoryName(entry.category)} – ${formatDuration(entry.duration)}</span>
+                                        <button class="entry-remove" onclick="removeEntry('${blockKey}', ${index})">×</button>
+                                    </div>
+                                `).join('')}
+                                <div class="time-remaining ${remainingMinutes <= 0 ? 'full' : ''}">
+                                    ${remainingMinutes <= 0 ? 'Block fully logged' : `${remainingMinutes}m remaining`}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(block);
+            });
+        }
+        
+        function formatDuration(duration) {
+            if (duration === 1) return '1hr';
+            if (duration === 0.5) return '30m';
+            if (duration === 0.25) return '15m';
+            if (duration === 0.75) return '45m';
+            return `${Math.round(duration * 60)}m`;
+        }
+        
+        function getCategoryName(id) {
+            const cat = categories.find(c => c.id === id);
+            return cat ? cat.name : id;
+        }
+        
+        function getCategoryIcon(id) {
+            const cat = categories.find(c => c.id === id);
+            return cat ? cat.icon : '';
+        }
+        
+        function toggleEntry(blockKey, categoryId, duration, maxAvailable = 1) {
+            if (!data.entries[blockKey]) {
+                data.entries[blockKey] = [];
+            }
+            
+            const existingIndex = data.entries[blockKey].findIndex(e => e.category === categoryId);
+            
+            if (existingIndex >= 0) {
+                const existing = data.entries[blockKey][existingIndex];
+                if (existing.duration === duration) {
+                    // Same duration clicked - remove entry
+                    data.entries[blockKey].splice(existingIndex, 1);
+                    if (data.entries[blockKey].length === 0) {
+                        delete data.entries[blockKey];
+                    }
+                } else {
+                    // Different duration - check if allowed, then update
+                    const otherTotal = data.entries[blockKey]
+                        .filter((e, i) => i !== existingIndex)
+                        .reduce((sum, e) => sum + e.duration, 0);
+                    
+                    if (otherTotal + duration > maxAvailable) {
+                        alert(`This would exceed the available time in this block (${Math.round(maxAvailable * 60)} minutes). Remove another entry or choose a shorter duration.`);
+                        return;
+                    }
+                    data.entries[blockKey][existingIndex].duration = duration;
+                }
+            } else {
+                // New entry - check if fits
+                const currentTotal = data.entries[blockKey].reduce((sum, e) => sum + e.duration, 0);
+                if (currentTotal + duration > maxAvailable) {
+                    alert(`This would exceed the available time in this block (${Math.round(maxAvailable * 60)} minutes). Remove an entry or choose a shorter duration.`);
+                    return;
+                }
+                data.entries[blockKey].push({ category: categoryId, duration: duration });
+            }
+            
+            saveData();
+            renderHourBlocks();
+        }
+        
+        function removeEntry(blockKey, index) {
+            data.entries[blockKey].splice(index, 1);
+            if (data.entries[blockKey].length === 0) {
+                delete data.entries[blockKey];
+            }
+            saveData();
+            renderHourBlocks();
+        }
+        
+        function setEnergy(blockKey, level) {
+            data.energy[blockKey] = level;
+            saveData();
+            renderHourBlocks();
+        }
+        
+        function setFocus(blockKey, level) {
+            data.focus[blockKey] = level;
+            saveData();
+            renderHourBlocks();
+        }
+        
+        function showView(view) {
+            document.querySelectorAll('.view-tab').forEach((tab, i) => {
+                const views = ['log', 'summary', 'reflection'];
+                tab.classList.toggle('active', views[i] === view);
+            });
+            
+            document.getElementById('log-view').classList.toggle('hidden', view !== 'log');
+            document.getElementById('summary-view').classList.toggle('hidden', view !== 'summary');
+            document.getElementById('reflection-view').classList.toggle('hidden', view !== 'reflection');
+            
+            if (view === 'summary') {
+                updateSummary();
+            }
+            if (view === 'reflection') {
+                loadReflections();
+            }
+        }
+        
+        function getDaysWithData() {
+            const daysWithData = new Set();
+            Object.keys(data.entries).forEach(key => {
+                const match = key.match(/day-(\d)/);
+                if (match) {
+                    daysWithData.add(match[1]);
+                }
+            });
+            return daysWithData.size;
+        }
+        
+        function updateSummary() {
+            const totals = {};
+            categories.forEach(cat => totals[cat.id] = 0);
+            
+            Object.values(data.entries).forEach(entries => {
+                entries.forEach(entry => {
+                    totals[entry.category] = (totals[entry.category] || 0) + entry.duration;
+                });
+            });
+            
+            const totalHours = Object.values(totals).reduce((sum, val) => sum + val, 0);
+            document.getElementById('total-hours').textContent = totalHours.toFixed(1) + 'h';
+            
+            // Visible leadership calculation
+            const visibleCategories = categories.filter(c => c.visible).map(c => c.id);
+            const vlHours = visibleCategories.reduce((sum, id) => sum + (totals[id] || 0), 0);
+            document.getElementById('vl-hours').textContent = vlHours.toFixed(1) + 'h';
+            
+            // Show reflection prompt if 3+ days of data
+            const daysWithData = getDaysWithData();
+            document.getElementById('reflection-prompt-box').classList.toggle('hidden', daysWithData < 3);
+            
+            // Sort categories by hours (descending) for chart
+            const sortedCategories = [...categories].sort((a, b) => totals[b.id] - totals[a.id]);
+            
+            // Chart - sorted by biggest time consumers
+            const maxHours = Math.max(...Object.values(totals), 1);
+            const chart = document.getElementById('chart-container');
+            chart.innerHTML = sortedCategories.map(cat => `
+                <div class="chart-bar-row">
+                    <span class="chart-label">${cat.name}</span>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill ${cat.visible ? 'visible-leadership' : ''}" style="width: ${Math.max((totals[cat.id] / maxHours) * 100, totals[cat.id] > 0 ? 8 : 0)}%">
+                            ${totals[cat.id] > 0 ? `<span class="chart-value">${totals[cat.id].toFixed(1)}h</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Summary grid - also sorted by hours
+            const grid = document.getElementById('summary-grid');
+            grid.innerHTML = sortedCategories.map(cat => `
+                <div class="summary-item ${cat.visible ? 'visible-leadership' : ''}">
+                    <span class="summary-category">${cat.icon} ${cat.name}</span>
+                    <span class="summary-hours">${totals[cat.id].toFixed(1)}h</span>
+                </div>
+            `).join('');
+        }
+        
+        function saveReflections() {
+            for (let i = 1; i <= 6; i++) {
+                data.reflections[`q${i}`] = document.getElementById(`reflection-${i}`).value;
+            }
+            saveData();
+        }
+        
+        function loadReflections() {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`reflection-${i}`).value = data.reflections[`q${i}`] || '';
+            }
+        }
+        
+        function getReportText() {
+            const totals = {};
+            categories.forEach(cat => totals[cat.id] = 0);
+            
+            Object.values(data.entries).forEach(entries => {
+                entries.forEach(entry => {
+                    totals[entry.category] = (totals[entry.category] || 0) + entry.duration;
+                });
+            });
+            
+            // Sort for export
+            const sortedCategories = [...categories].sort((a, b) => totals[b.id] - totals[a.id]);
+            
+            const totalHours = Object.values(totals).reduce((sum, val) => sum + val, 0);
+            const visibleCategories = categories.filter(c => c.visible).map(c => c.id);
+            const vlHours = visibleCategories.reduce((sum, id) => sum + (totals[id] || 0), 0);
+            
+            // Calculate work times summary
+            let workTimesSummary = '\nWORK TIMES BY DAY\n-----------------\n';
+            for (let d = 0; d < 5; d++) {
+                const dayKey = `day-${d}`;
+                const startTime = data.workTimes[`${dayKey}-start`];
+                const stopTime = data.workTimes[`${dayKey}-stop`];
+                const location = data.locations[dayKey];
+                
+                const dayName = days[d];
+                let dayInfo = `${dayName}: `;
+                
+                if (startTime && stopTime) {
+                    dayInfo += `${formatTimeValue(startTime)} – ${formatTimeValue(stopTime)}`;
+                    if (location) {
+                        dayInfo += ` (${location})`;
+                    }
+                } else {
+                    dayInfo += 'Not recorded';
+                }
+                workTimesSummary += dayInfo + '\n';
+            }
+            
+            return `TAKE BACK 5 - TIME AUDIT REPORT
+================================
+Generated: ${new Date().toLocaleDateString()}
+
+SUMMARY
+-------
+Total Hours Logged: ${totalHours.toFixed(1)} hours
+Visible Leadership Time: ${vlHours.toFixed(1)} hours
+  (Classroom Visits + Playground & Gate + Staff Room)
+${workTimesSummary}
+HOURS BY CATEGORY (Sorted by Time Spent)
+----------------------------------------
+${sortedCategories.map(cat => `${cat.icon} ${cat.name}: ${totals[cat.id].toFixed(1)} hours`).join('\n')}
+
+REFLECTIONS
+-----------
+1. What surprised you about where your time went?
+${data.reflections.q1 || '(Not answered)'}
+
+2. Where did you lose time you didn't expect?
+${data.reflections.q2 || '(Not answered)'}
+
+3. What did you NOT get to that you wished you had?
+${data.reflections.q3 || '(Not answered)'}
+
+4. How much time did you spend in visible leadership?
+${data.reflections.q4 || '(Not answered)'}
+
+5. What energised you this week? What drained you?
+${data.reflections.q5 || '(Not answered)'}
+
+6. If you could claw back 5 hours, where would they come from?
+${data.reflections.q6 || '(Not answered)'}
+
+---
+Take Back 5 Time Audit Tool
+Created by Andy Rankin
+`;
+        }
+        
+        async function smartExport() {
+            const report = getReportText();
+            
+            // Try Web Share API first (gives native iOS share sheet)
+            if (navigator.share) {
+                try {
+                    // Try sharing with file attachment first
+                    const blob = new Blob([report], { type: 'text/plain' });
+                    const file = new File([blob], 'Take-Back-5-Time-Audit.txt', { type: 'text/plain' });
+                    
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            title: 'Take Back 5 - Time Audit Report',
+                            files: [file]
+                        });
+                        return;
+                    }
+                } catch (err) {
+                    if (err.name === 'AbortError') return; // User cancelled
+                }
+                
+                // Try text-only share
+                try {
+                    await navigator.share({
+                        title: 'Take Back 5 - Time Audit Report',
+                        text: report
+                    });
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                    // Fall through to clipboard
+                }
+            }
+            
+            // Fallback: Copy to clipboard + show helpful modal
+            try {
+                await navigator.clipboard.writeText(report);
+                showExportModal('clipboard');
+                return;
+            } catch (err) {
+                // Clipboard failed too - try textarea hack for older iOS
+                try {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = report;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showExportModal('clipboard');
+                    return;
+                } catch (e) {
+                    // Nothing worked - offer download
+                }
+            }
+            
+            // Final fallback: .txt download
+            exportData();
+            showExportModal('download');
+        }
+        
+        function showExportModal(method) {
+            const overlay = document.getElementById('export-overlay');
+            const icon = document.getElementById('export-modal-icon');
+            const title = document.getElementById('export-modal-title');
+            const subtitle = document.getElementById('export-modal-subtitle');
+            const steps = document.getElementById('export-modal-steps');
+            const shareBtn = document.getElementById('export-try-share-btn');
+            
+            if (method === 'clipboard') {
+                icon.textContent = '📋';
+                title.textContent = 'Report Copied!';
+                subtitle.textContent = 'Your time audit report is ready to paste. Here\'s what to do:';
+                steps.innerHTML = `
+                    <li><span class="step-num">1</span><span>Open <strong>Mail</strong>, <strong>Notes</strong>, or any app</span></li>
+                    <li><span class="step-num">2</span><span>Tap where you want the report, then <strong>hold your finger down</strong> until "Paste" appears</span></li>
+                    <li><span class="step-num">3</span><span>Tap <strong>Paste</strong> — your full report will appear</span></li>
+                `;
+                shareBtn.style.display = navigator.share ? 'block' : 'none';
+            } else {
+                icon.textContent = '📥';
+                title.textContent = 'Report Downloaded!';
+                subtitle.textContent = 'A text file has been saved. You can find it in your Downloads.';
+                steps.innerHTML = `
+                    <li><span class="step-num">1</span><span>Open the <strong>Files</strong> app on your phone</span></li>
+                    <li><span class="step-num">2</span><span>Look in <strong>Downloads</strong> for "Take-Back-5-Time-Audit.txt"</span></li>
+                    <li><span class="step-num">3</span><span>Tap to open, then share via email to your coach</span></li>
+                `;
+                shareBtn.style.display = 'none';
+            }
+            
+            overlay.classList.add('visible');
+        }
+        
+        function closeExportOverlay() {
+            document.getElementById('export-overlay').classList.remove('visible');
+        }
+        
+        async function tryShareFromModal() {
+            closeExportOverlay();
+            const report = getReportText();
+            try {
+                await navigator.share({
+                    title: 'Take Back 5 - Time Audit Report',
+                    text: report
+                });
+            } catch (err) {
+                // If share fails, they already have clipboard copy
+            }
+        }
+        
+        function exportData() {
+            const report = getReportText();
+            
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Take-Back-5-Time-Audit.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function formatTimeValue(value) {
+            const hours = Math.floor(value);
+            const mins = Math.round((value - hours) * 60);
+            const hour12 = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const minsStr = mins.toString().padStart(2, '0');
+            return `${hour12}:${minsStr} ${ampm}`;
+        }
+        
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all your time audit data? This cannot be undone.')) {
+                localStorage.removeItem('takeBack5TimeAudit');
+                data = { entries: {}, energy: {}, focus: {}, workTimes: {}, locations: {}, reflections: {} };
+                expandedHour = null;
+                renderHourBlocks();
+                updateDayTabs();
+                updateWorkTimesUI();
+                alert('All data cleared.');
+            }
+        }
+        
+        // Initialize
+        initWorkTimeSelects();
+        updateWorkTimesUI();
+        renderHourBlocks();
+        updateDayTabs();
+        
+        // Show save status on load
+        (function() {
+            const saved = localStorage.getItem('takeBack5TimeAudit');
+            if (saved) {
+                document.getElementById('save-status').textContent = '✓ Data loaded from previous session';
+            }
+        })();
+    </script>
+</body>
+</html>
