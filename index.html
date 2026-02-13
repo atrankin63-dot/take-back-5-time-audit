@@ -9,8 +9,10 @@
     <meta name="theme-color" content="#1a365d">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <title>Take Back 5 - Time Audit</title>
+    <title>Take Back 5 — Time Audit</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap');
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,7 +25,7 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f5f7fa;
             min-height: 100vh;
             color: #2d3748;
@@ -90,7 +92,7 @@
         header {
             text-align: center;
             padding: 24px 16px;
-            background: linear-gradient(135deg, #1a365d 0%, #2d4a6f 100%);
+            background: #0f1724;
             color: white;
             margin: -16px -16px 20px -16px;
         }
@@ -148,7 +150,7 @@
         }
         
         .day-tab.has-data::after {
-            content: '✓';
+            content: 'âœ“';
             position: absolute;
             top: -6px;
             right: -6px;
@@ -176,6 +178,7 @@
         .view-tab {
             flex: 1;
             padding: 10px 16px;
+            font-family: inherit;
             border: none;
             background: transparent;
             color: #4a5568;
@@ -217,7 +220,7 @@
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #48bb78, #38a169);
+            background: #1a2332;
             border-radius: 3px;
             transition: width 0.3s;
         }
@@ -643,12 +646,12 @@
         }
         
         .stat-card.total {
-            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            background: #1a2332;
             color: white;
         }
         
         .stat-card.visible {
-            background: linear-gradient(135deg, #48bb78 0%, #2f855a 100%);
+            background: #15803d;
             color: white;
         }
         
@@ -666,7 +669,7 @@
         
         /* Reflection Prompt Box */
         .reflection-prompt-box {
-            background: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%);
+            background: #1a2332;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 24px;
@@ -733,7 +736,7 @@
         
         .chart-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #3182ce, #4299e1);
+            background: #2d3f56;
             border-radius: 6px;
             transition: width 0.3s;
             display: flex;
@@ -744,7 +747,7 @@
         }
         
         .chart-bar-fill.visible-leadership {
-            background: linear-gradient(90deg, #48bb78, #68d391);
+            background: #16a34a;
         }
         
         .chart-value {
@@ -796,7 +799,7 @@
         
         .btn-primary {
             padding: 12px 24px;
-            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            background: #1a2332;
             color: white;
             border: none;
             border-radius: 8px;
@@ -1127,7 +1130,7 @@
             min-height: 50px;
         }
         .export-modal .modal-btn-primary {
-            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            background: #1a2332;
             color: white;
             margin-bottom: 8px;
         }
@@ -1135,26 +1138,279 @@
             background: #edf2f7;
             color: #4a5568;
         }
+
+        /* AI Insights View */
+        .insights-locked {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .insights-locked .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        .insights-locked h3 {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .insights-locked p {
+            color: #718096;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .insights-progress {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .insights-progress-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #a0aec0;
+            transition: all 0.3s;
+        }
+        .insights-progress-dot.filled {
+            background: #48bb78;
+            color: white;
+        }
+        .insights-hero {
+            background: #0f1724;
+            border-radius: 12px;
+            padding: 24px;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .insights-hero h2 {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+        .insights-hero p {
+            opacity: 0.85;
+            font-size: 0.9rem;
+        }
+        .time-saved-banner {
+            background: #15803d;
+            border-radius: 12px;
+            padding: 24px;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .time-saved-banner h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+        .time-saved-banner .big-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .time-saved-banner .subtitle {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+        .insight-category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #3182ce;
+        }
+        .insight-category-card.high-impact {
+            border-left-color: #e53e3e;
+        }
+        .insight-category-card.medium-impact {
+            border-left-color: #ed8936;
+        }
+        .insight-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .insight-category-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .insight-category-hours {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #718096;
+            background: #edf2f7;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        .insight-suggestion {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+        .insight-suggestion:last-child {
+            margin-bottom: 0;
+        }
+        .insight-suggestion h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+        .insight-suggestion p {
+            font-size: 0.85rem;
+            color: #4a5568;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+        .insight-suggestion .tool-tag {
+            display: inline-block;
+            background: #ebf8ff;
+            color: #2c5282;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        .insight-suggestion .time-save-tag {
+            display: inline-block;
+            background: #f0fff4;
+            color: #276749;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .redirect-section {
+            background: #1a2332;
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .redirect-section h3 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .redirect-section p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        .redirect-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+        .redirect-item .redirect-icon {
+            font-size: 1.2rem;
+        }
+        .quick-start-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .quick-start-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+        .quick-start-step {
+            display: flex;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid #e2e8f0;
+            align-items: flex-start;
+        }
+        .quick-start-step:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .quick-start-num {
+            background: #1a2332;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .quick-start-content h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 2px;
+        }
+        .quick-start-content p {
+            font-size: 0.85rem;
+            color: #718096;
+            line-height: 1.4;
+        }
+        .insights-disclaimer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #a0aec0;
+            padding: 16px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 500px) {
+            .view-tab {
+                padding: 10px 8px;
+                font-size: 0.8rem;
+            }
+            .insights-hero {
+                padding: 20px 16px;
+            }
+            .insights-hero h2 {
+                font-size: 1.15rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📊 Take Back 5</h1>
+            <h1>Take Back 5</h1>
             <p>Time Audit for School Leaders</p>
         </header>
         
         <!-- Save indicator toast -->
-        <div class="save-indicator" id="save-indicator">✓ Saved</div>
+        <div class="save-indicator" id="save-indicator">âœ“ Saved</div>
         
         <!-- Save status -->
         <div class="save-status" id="save-status">Data saves automatically</div>
         
         <!-- View Toggle -->
         <div class="view-tabs">
-            <button class="view-tab active" onclick="showView('log')">📝 Log Time</button>
-            <button class="view-tab" onclick="showView('summary')">📈 Summary</button>
-            <button class="view-tab" onclick="showView('reflection')">💭 Reflect</button>
+            <button class="view-tab active" onclick="showView('log')">Log</button>
+            <button class="view-tab" onclick="showView('summary')">Summary</button>
+            <button class="view-tab" onclick="showView('reflection')">Reflect</button>
+            <button class="view-tab" onclick="showView('insights')">Insights</button>
         </div>
         
         <!-- LOG VIEW -->
@@ -1162,7 +1418,7 @@
             <div class="card">
                 <div class="instructions">
                     <h3>How to use this audit</h3>
-                    <p>Set your start and stop work times, then log what you did each hour. Track for 5 days. The patterns matter more than perfect accuracy.</p>
+                    <p>Set your start and finish times, then log what you did each hour. Track for 5 days – the patterns matter more than perfect accuracy.</p>
                 </div>
                 
                 <!-- Day Tabs -->
@@ -1192,14 +1448,14 @@
                             </select>
                         </div>
                         <div class="work-time-group">
-                            <span class="work-time-label">Stopped work:</span>
+                            <span class="work-time-label">Finished work:</span>
                             <select class="work-time-select" id="stop-time-select" onchange="setWorkTime('stop')">
                                 <option value="">-- Select --</option>
                             </select>
                         </div>
                     </div>
                     <div class="location-row">
-                        <span class="location-label">📍 Location:</span>
+                        <span class="location-label">Location:</span>
                         <div class="location-buttons">
                             <button class="location-btn" onclick="setLocation('home')">Home</button>
                             <button class="location-btn" onclick="setLocation('school')">School</button>
@@ -1231,9 +1487,9 @@
                 
                 <!-- Reflection Prompt (shown after 3+ days) -->
                 <div class="reflection-prompt-box hidden" id="reflection-prompt-box">
-                    <h3>📊 You've logged 3+ days of data</h3>
+                    <h3>You've logged 3+ days of data</h3>
                     <p>Ready to make sense of what you're seeing? Take 10 minutes to reflect on the patterns.</p>
-                    <button onclick="showView('reflection')">💭 Complete Your Reflection</button>
+                    <button onclick="showView('reflection')">Complete Your Reflection</button>
                 </div>
                 
                 <div class="chart-section">
@@ -1247,8 +1503,8 @@
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn-primary" onclick="smartExport()">📤 Export Report</button>
-                    <button class="btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+                    <button class="btn-primary" onclick="smartExport()">Export Report</button>
+                    <button class="btn-danger" onclick="clearAllData()">Clear All Data</button>
                 </div>
             </div>
         </div>
@@ -1260,7 +1516,7 @@
                 
                 <div class="instructions">
                     <h3>Before you reflect</h3>
-                    <p>Review your summary data first. Be honest with yourself – this audit is for your benefit, not anyone else's.</p>
+                    <p>Review your summary data first. Be honest – this audit is for your eyes and your growth, not anyone else's.</p>
                 </div>
                 
                 <div class="reflection-prompt">
@@ -1279,7 +1535,7 @@
                 </div>
                 
                 <div class="reflection-prompt">
-                    <label>4. How much time did you spend in visible leadership (classroom visits, playground, gate, staff room combined)? Is this enough?</label>
+                    <label>4. Look at your visible leadership time (classroom visits, playground, gate, staff room). Is it enough? What would you change?</label>
                     <textarea id="reflection-4" placeholder="My visible leadership time was..." oninput="saveReflections()"></textarea>
                 </div>
                 
@@ -1294,16 +1550,20 @@
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn-primary" onclick="smartExport()">📤 Export Full Report</button>
+                    <button class="btn-primary" onclick="smartExport()">Export Full Report</button>
                 </div>
             </div>
         </div>
+        <!-- AI INSIGHTS VIEW -->
+        <div id="insights-view" class="hidden">
+            <div id="insights-content"></div>
+        </div>
     </div>
-    
+
     <!-- Export success overlay -->
     <div class="export-overlay" id="export-overlay">
         <div class="export-modal">
-            <div class="modal-icon" id="export-modal-icon">✅</div>
+            <div class="modal-icon" id="export-modal-icon">✓</div>
             <h3 id="export-modal-title">Report Copied!</h3>
             <p id="export-modal-subtitle">Your time audit report is on your clipboard. Here's what to do next:</p>
             <ol class="step-list" id="export-modal-steps">
@@ -1319,18 +1579,18 @@
     <script>
         // Categories in priority order
         const categories = [
-            { id: 'email', name: 'Email & Inbox', icon: '📧' },
-            { id: 'meetings', name: 'Meetings', icon: '👥' },
-            { id: 'communications', name: 'Communications', icon: '📝' },
-            { id: 'compliance', name: 'Compliance & Reporting', icon: '📋' },
-            { id: 'operational', name: 'Operational/Reactive', icon: '🔥' },
-            { id: 'parent-community', name: 'Parent/Community', icon: '👨‍👩‍👧' },
-            { id: 'staff-coaching', name: 'Staff Coaching', icon: '💬' },
-            { id: 'classroom', name: 'Classroom Visits', icon: '🏫', visible: true },
-            { id: 'playground', name: 'Playground & Gate', icon: '🚸', visible: true },
-            { id: 'staffroom', name: 'Staff Room', icon: '☕', visible: true },
-            { id: 'strategic', name: 'Strategic/Thinking', icon: '🎯' },
-            { id: 'personal', name: 'Personal', icon: '🧘' }
+            { id: 'email', name: 'Email & Inbox', icon: 'EM' },
+            { id: 'meetings', name: 'Meetings', icon: 'MT' },
+            { id: 'communications', name: 'Communications', icon: 'CO' },
+            { id: 'compliance', name: 'Compliance & Reporting', icon: 'CR' },
+            { id: 'operational', name: 'Operational/Reactive', icon: 'OP' },
+            { id: 'parent-community', name: 'Parent/Community', icon: 'PC' },
+            { id: 'staff-coaching', name: 'Staff Conversations', icon: 'SC' },
+            { id: 'classroom', name: 'Classroom Visits', icon: 'CV', visible: true },
+            { id: 'playground', name: 'Playground & Gate', icon: 'PG', visible: true },
+            { id: 'staffroom', name: 'Staff Room', icon: 'SR', visible: true },
+            { id: 'strategic', name: 'Strategic/Thinking', icon: 'ST' },
+            { id: 'personal', name: 'Personal & Wellbeing', icon: 'PW' }
         ];
         
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -1382,10 +1642,10 @@
             const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
             
             // Update persistent status
-            status.textContent = `✓ Last saved: ${timeStr}`;
+            status.textContent = `âœ“ Last saved: ${timeStr}`;
             
             // Flash toast
-            indicator.textContent = '✓ Saved';
+            indicator.textContent = 'âœ“ Saved';
             indicator.classList.add('visible');
             clearTimeout(window._saveToastTimer);
             window._saveToastTimer = setTimeout(() => {
@@ -1623,7 +1883,7 @@
                                 return `
                                     <div class="category-row ${catEntry ? 'has-entry' : ''} ${cat.visible ? 'visible-leadership' : ''}">
                                         <div class="category-info">
-                                            <span class="category-icon">${cat.icon}</span>
+                                            <span class="category-icon" style="font-size:0.65rem;font-weight:700;letter-spacing:0.02em;">${cat.icon}</span>
                                             <span class="category-name">${cat.name}</span>
                                         </div>
                                         <div class="duration-buttons">
@@ -1647,7 +1907,7 @@
                                 <div class="logged-title">Logged This Hour</div>
                                 ${entries.map((entry, index) => `
                                     <div class="entry-item">
-                                        <span class="entry-text">${getCategoryIcon(entry.category)} ${getCategoryName(entry.category)} – ${formatDuration(entry.duration)}</span>
+                                        <span class="entry-text">${getCategoryName(entry.category)} – ${formatDuration(entry.duration)}</span>
                                         <button class="entry-remove" onclick="removeEntry('${blockKey}', ${index})">×</button>
                                     </div>
                                 `).join('')}
@@ -1744,19 +2004,23 @@
         
         function showView(view) {
             document.querySelectorAll('.view-tab').forEach((tab, i) => {
-                const views = ['log', 'summary', 'reflection'];
+                const views = ['log', 'summary', 'reflection', 'insights'];
                 tab.classList.toggle('active', views[i] === view);
             });
-            
+
             document.getElementById('log-view').classList.toggle('hidden', view !== 'log');
             document.getElementById('summary-view').classList.toggle('hidden', view !== 'summary');
             document.getElementById('reflection-view').classList.toggle('hidden', view !== 'reflection');
-            
+            document.getElementById('insights-view').classList.toggle('hidden', view !== 'insights');
+
             if (view === 'summary') {
                 updateSummary();
             }
             if (view === 'reflection') {
                 loadReflections();
+            }
+            if (view === 'insights') {
+                renderInsights();
             }
         }
         
@@ -1814,7 +2078,7 @@
             const grid = document.getElementById('summary-grid');
             grid.innerHTML = sortedCategories.map(cat => `
                 <div class="summary-item ${cat.visible ? 'visible-leadership' : ''}">
-                    <span class="summary-category">${cat.icon} ${cat.name}</span>
+                    <span class="summary-category">${cat.name}</span>
                     <span class="summary-hours">${totals[cat.id].toFixed(1)}h</span>
                 </div>
             `).join('');
@@ -1884,7 +2148,7 @@ Visible Leadership Time: ${vlHours.toFixed(1)} hours
 ${workTimesSummary}
 HOURS BY CATEGORY (Sorted by Time Spent)
 ----------------------------------------
-${sortedCategories.map(cat => `${cat.icon} ${cat.name}: ${totals[cat.id].toFixed(1)} hours`).join('\n')}
+${sortedCategories.map(cat => `${cat.name}: ${totals[cat.id].toFixed(1)} hours`).join('\n')}
 
 REFLECTIONS
 -----------
@@ -1897,7 +2161,7 @@ ${data.reflections.q2 || '(Not answered)'}
 3. What did you NOT get to that you wished you had?
 ${data.reflections.q3 || '(Not answered)'}
 
-4. How much time did you spend in visible leadership?
+4. Your visible leadership time – is it enough? What would you change?
 ${data.reflections.q4 || '(Not answered)'}
 
 5. What energised you this week? What drained you?
@@ -1908,7 +2172,7 @@ ${data.reflections.q6 || '(Not answered)'}
 
 ---
 Take Back 5 Time Audit Tool
-Created by Andy Rankin
+Created by Andy Rankin | Take Back 5 | AI Coaching for School Leaders
 `;
         }
         
@@ -1983,17 +2247,17 @@ Created by Andy Rankin
             const shareBtn = document.getElementById('export-try-share-btn');
             
             if (method === 'clipboard') {
-                icon.textContent = '📋';
+                icon.textContent = '';
                 title.textContent = 'Report Copied!';
                 subtitle.textContent = 'Your time audit report is ready to paste. Here\'s what to do:';
                 steps.innerHTML = `
                     <li><span class="step-num">1</span><span>Open <strong>Mail</strong>, <strong>Notes</strong>, or any app</span></li>
                     <li><span class="step-num">2</span><span>Tap where you want the report, then <strong>hold your finger down</strong> until "Paste" appears</span></li>
-                    <li><span class="step-num">3</span><span>Tap <strong>Paste</strong> — your full report will appear</span></li>
+                    <li><span class="step-num">3</span><span>Tap <strong>Paste</strong> – your full report will appear</span></li>
                 `;
                 shareBtn.style.display = navigator.share ? 'block' : 'none';
             } else {
-                icon.textContent = '📥';
+                icon.textContent = '';
                 title.textContent = 'Report Downloaded!';
                 subtitle.textContent = 'A text file has been saved. You can find it in your Downloads.';
                 steps.innerHTML = `
@@ -2057,6 +2321,572 @@ Created by Andy Rankin
             }
         }
         
+        // AI Suggestions Knowledge Base
+        const aiSuggestionsDB = {
+            'email': {
+                savingsRange: [15, 30],
+                suggestions: [
+                    {
+                        title: 'AI-Drafted Replies',
+                        description: 'Paste incoming emails into Claude or ChatGPT and ask for a professional reply. Most routine parent, supplier, and admin emails can be drafted in seconds.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '5–10 min per email'
+                    },
+                    {
+                        title: 'Smart Email Templates',
+                        description: 'Ask AI to create templates for your 10 most common email types (absence follow-ups, event confirmations, parent enquiries). Personalise each in seconds before sending.',
+                        tools: ['Any AI assistant'],
+                        timeSaved: '15–20 min daily'
+                    },
+                    {
+                        title: 'Morning Inbox Triage',
+                        description: 'Use AI to help prioritise your inbox by categorising messages. Particularly useful on heavy-volume mornings when you need to triage quickly.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '10–15 min daily'
+                    }
+                ]
+            },
+            'meetings': {
+                savingsRange: [10, 20],
+                suggestions: [
+                    {
+                        title: 'AI Meeting Notes & Actions',
+                        description: 'Use an AI note-taker to automatically capture key points, decisions, and action items. No more writing up minutes after the meeting.',
+                        tools: ['Otter.ai', 'Microsoft Copilot', 'Read.ai'],
+                        timeSaved: '15–30 min per meeting'
+                    },
+                    {
+                        title: 'AI Agenda Builder',
+                        description: 'Give AI your meeting purpose and attendees – it generates a focused agenda with time allocations. Keeps meetings shorter and on track.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '10 min per meeting'
+                    },
+                    {
+                        title: 'Replace Meetings with Async Updates',
+                        description: 'For information-only meetings, AI can draft concise written updates instead. The time saving comes from the decision to go async — AI just makes it easier to write well.',
+                        tools: ['Claude', 'Loom'],
+                        timeSaved: '30–60 min per week'
+                    }
+                ]
+            },
+            'communications': {
+                savingsRange: [25, 40],
+                suggestions: [
+                    {
+                        title: 'AI Newsletter & Update Drafting',
+                        description: 'Give AI your key points and it drafts the full newsletter, parent letter, or staff update in your school\'s tone. Edit rather than write from scratch.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '30–45 min per communication'
+                    },
+                    {
+                        title: 'Multilingual Communications',
+                        description: 'AI can translate parent letters and notices into community languages instantly. No waiting for translation services.',
+                        tools: ['Claude', 'ChatGPT', 'DeepL'],
+                        timeSaved: '20–30 min per translation'
+                    },
+                    {
+                        title: 'Social Media & Community Posts',
+                        description: 'Give AI a few photos and dot points from the day – it drafts engaging school social media posts, saving you creative writing time.',
+                        tools: ['Claude', 'ChatGPT', 'Canva AI'],
+                        timeSaved: '15–20 min per post'
+                    }
+                ]
+            },
+            'compliance': {
+                savingsRange: [20, 35],
+                suggestions: [
+                    {
+                        title: 'AI Report Drafting',
+                        description: 'Paste your data into AI and ask it to draft compliance reports, annual reports, or school plans. It handles the structure and wording – you handle accuracy.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '1–3 hours per report'
+                    },
+                    {
+                        title: 'Policy Document Review',
+                        description: 'Ask AI to review, update, or summarise policy documents against current requirements. It flags what needs changing.',
+                        tools: ['Claude'],
+                        timeSaved: '30–60 min per policy'
+                    },
+                    {
+                        title: 'Data Analysis & Visualisation',
+                        description: 'Feed your school data to AI and ask for analysis, trends, and charts. It turns raw numbers into insights for your reports.',
+                        tools: ['Claude', 'Excel Copilot', 'ChatGPT'],
+                        timeSaved: '30–60 min per analysis'
+                    }
+                ]
+            },
+            'operational': {
+                savingsRange: [10, 20],
+                suggestions: [
+                    {
+                        title: 'AI-Powered FAQ & Response Bank',
+                        description: 'Build an AI reference sheet for common operational queries (uniform policy, lost property, excursion forms). Staff and office can use it to answer questions instantly.',
+                        tools: ['Claude', 'ChatGPT', 'School website chatbot'],
+                        timeSaved: '15–30 min daily'
+                    },
+                    {
+                        title: 'Decision Flowcharts',
+                        description: 'Ask AI to create decision trees for routine situations (student illness, behaviour incidents, parent complaints). A one-off investment that pays off as your team handles more without escalating to you.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '20–40 min daily'
+                    },
+                    {
+                        title: 'Timetable & Roster Optimisation',
+                        description: 'Use AI to draft relief timetables, duty rosters, and event schedules. Give it your constraints and it finds workable solutions.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '15–30 min per task'
+                    }
+                ]
+            },
+            'parent-community': {
+                savingsRange: [15, 25],
+                suggestions: [
+                    {
+                        title: 'AI-Drafted Parent Responses',
+                        description: 'For sensitive or complex parent communications, use AI to draft thoughtful, empathetic responses. It helps you find the right tone and cover all the points.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '10–20 min per response'
+                    },
+                    {
+                        title: 'Event Planning Assistance',
+                        description: 'Give AI your event details and it creates checklists, timelines, communication plans, and volunteer rosters. Takes the admin burden off community events.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '30–60 min per event'
+                    },
+                    {
+                        title: 'Feedback Analysis',
+                        description: 'Paste parent survey responses into AI and ask it to identify themes, sentiment, and actionable insights. Saves hours of manual reading.',
+                        tools: ['Claude'],
+                        timeSaved: '1–2 hours per survey'
+                    }
+                ]
+            },
+            'staff-coaching': {
+                savingsRange: [10, 20],
+                suggestions: [
+                    {
+                        title: 'AI Observation Feedback',
+                        description: 'After classroom visits, give AI your raw notes and ask it to draft constructive, specific feedback aligned to your teaching standards.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '10–15 min per observation'
+                    },
+                    {
+                        title: 'Professional Learning Design',
+                        description: 'Describe your staff\'s learning needs and AI designs session plans, activities, and resources. It can also suggest relevant research.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: '30–60 min per session'
+                    },
+                    {
+                        title: 'Performance Development Plans',
+                        description: 'AI can help draft goals, evidence suggestions, and professional learning pathways tailored to each staff member\'s growth areas.',
+                        tools: ['Claude'],
+                        timeSaved: '20–30 min per plan'
+                    }
+                ]
+            },
+            'classroom': {
+                isVisible: true,
+                savingsRange: [0, 0],
+                suggestions: [
+                    {
+                        title: 'This is high-value time – protect it',
+                        description: 'Classroom visits are one of the highest-impact activities for a school leader. Use time saved from other categories to do MORE of this, not less.',
+                        tools: [],
+                        timeSaved: 'Increase, don\'t decrease'
+                    }
+                ]
+            },
+            'playground': {
+                isVisible: true,
+                savingsRange: [0, 0],
+                suggestions: [
+                    {
+                        title: 'Visible leadership at its best',
+                        description: 'Being present at the gate, in the playground, and around the school builds trust and connection. This is time well spent – aim to increase it.',
+                        tools: [],
+                        timeSaved: 'Increase, don\'t decrease'
+                    }
+                ]
+            },
+            'staffroom': {
+                isVisible: true,
+                savingsRange: [0, 0],
+                suggestions: [
+                    {
+                        title: 'Informal connection matters',
+                        description: 'Staff room presence builds relationships and culture. It\'s where you hear what\'s really going on. Protect this time.',
+                        tools: [],
+                        timeSaved: 'Protect this time'
+                    }
+                ]
+            },
+            'strategic': {
+                savingsRange: [0, 0],
+                isStrategic: true,
+                suggestions: [
+                    {
+                        title: 'AI as Your Thinking Partner',
+                        description: 'Use AI to brainstorm ideas, challenge assumptions, explore scenarios, and research best practice. It\'s like having a thought partner available 24/7.',
+                        tools: ['Claude', 'ChatGPT'],
+                        timeSaved: 'Enhances quality, not just speed'
+                    },
+                    {
+                        title: 'Strategic Research & Summaries',
+                        description: 'Ask AI to summarise research papers, analyse school improvement models, or compare approaches to a challenge you\'re facing.',
+                        tools: ['Claude'],
+                        timeSaved: 'Hours of reading → minutes'
+                    }
+                ]
+            },
+            'personal': {
+                savingsRange: [0, 0],
+                isPersonal: true,
+                suggestions: [
+                    {
+                        title: 'Protect your personal time',
+                        description: 'This time is essential for your wellbeing and sustainability as a leader. The goal is to use AI to save time elsewhere so you can protect – or even increase – this.',
+                        tools: [],
+                        timeSaved: 'Non-negotiable'
+                    }
+                ]
+            }
+        };
+
+        function renderInsights() {
+            const container = document.getElementById('insights-content');
+            const daysLogged = getDaysWithData();
+
+            if (daysLogged < 3) {
+                container.innerHTML = renderLockedInsights(daysLogged);
+                return;
+            }
+
+            // Calculate totals
+            const totals = {};
+            categories.forEach(cat => totals[cat.id] = 0);
+            Object.values(data.entries).forEach(entries => {
+                entries.forEach(entry => {
+                    totals[entry.category] = (totals[entry.category] || 0) + entry.duration;
+                });
+            });
+
+            const totalHours = Object.values(totals).reduce((sum, val) => sum + val, 0);
+
+            // Get top time consumers (excluding visible leadership, strategic, personal)
+            const reducibleCategories = Object.entries(totals)
+                .filter(([id, hours]) => {
+                    const db = aiSuggestionsDB[id];
+                    return hours > 0 && db && !db.isVisible && !db.isStrategic && !db.isPersonal;
+                })
+                .sort((a, b) => b[1] - a[1]);
+
+            // Calculate estimated savings
+            let totalSavingsLow = 0;
+            let totalSavingsHigh = 0;
+            reducibleCategories.forEach(([id, hours]) => {
+                const db = aiSuggestionsDB[id];
+                if (db && db.savingsRange) {
+                    totalSavingsLow += hours * (db.savingsRange[0] / 100);
+                    totalSavingsHigh += hours * (db.savingsRange[1] / 100);
+                }
+            });
+
+            // Show actual logged data without inflating
+            const scaleFactor = 1;
+            const weeklySavingsLow = (totalSavingsLow * scaleFactor).toFixed(1);
+            const weeklySavingsHigh = (totalSavingsHigh * scaleFactor).toFixed(1);
+
+            // Visible leadership hours
+            const vlCategories = categories.filter(c => c.visible).map(c => c.id);
+            const vlHours = vlCategories.reduce((sum, id) => sum + (totals[id] || 0), 0);
+
+            // Build the HTML
+            let html = '';
+
+            // Hero section
+            html += `
+                <div class="insights-hero">
+                    <h2>Your Personalised AI Action Plan</h2>
+                    <p>Based on ${daysLogged} day${daysLogged !== 1 ? 's' : ''} of data${daysLogged < 5 ? ' — log all 5 for the full picture' : ''}</p>
+                </div>
+            `;
+
+            // Coaching context note
+            html += `
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:16px; margin-bottom:20px;">
+                    <p style="font-size:0.85rem; color:#1a2332; line-height:1.6; margin:0;">
+                        These suggestions are a starting point for our coaching conversation. The real value comes from identifying which changes fit <strong>your</strong> school context. We will explore these together in your sessions.
+                    </p>
+                </div>
+            `;
+
+            // Time saved banner
+            if (totalSavingsLow > 0) {
+                html += `
+                    <div class="time-saved-banner">
+                        <h3>Potential Time Savings (from data logged so far)</h3>
+                        <div class="big-number">${weeklySavingsLow}–${weeklySavingsHigh} hours</div>
+                        <div class="subtitle">That's ${Math.round((parseFloat(weeklySavingsLow) / (totalHours * scaleFactor)) * 100)}–${Math.round((parseFloat(weeklySavingsHigh) / (totalHours * scaleFactor)) * 100)}% of your working week back</div>
+                    </div>
+                `;
+            }
+
+            // Top time consumers with AI suggestions
+            const topConsumers = reducibleCategories.slice(0, 4);
+            if (topConsumers.length > 0) {
+                topConsumers.forEach(([id, hours], index) => {
+                    const cat = categories.find(c => c.id === id);
+                    const db = aiSuggestionsDB[id];
+                    if (!cat || !db) return;
+
+                    const savingsLow = (hours * db.savingsRange[0] / 100).toFixed(1);
+                    const savingsHigh = (hours * db.savingsRange[1] / 100).toFixed(1);
+                    const pct = ((hours / totalHours) * 100).toFixed(0);
+                    const impactClass = index === 0 ? 'high-impact' : index === 1 ? 'medium-impact' : '';
+
+                    html += `
+                        <div class="insight-category-card ${impactClass}">
+                            <div class="insight-category-header">
+                                <span class="insight-category-title">${cat.name}</span>
+                                <span class="insight-category-hours">${hours.toFixed(1)}h logged (${pct}%)</span>
+                            </div>
+                    `;
+
+                    db.suggestions.forEach(s => {
+                        html += `
+                            <div class="insight-suggestion">
+                                <h4>${s.title}</h4>
+                                <p>${s.description}</p>
+                                <div>
+                                    ${s.tools.map(t => `<span class="tool-tag">${t}</span>`).join('')}
+                                    <span class="time-save-tag"> ${s.timeSaved}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                            <div style="margin-top:12px; padding:10px; background:#f0fff4; border-radius:8px; text-align:center;">
+                                <span style="font-size:0.85rem; font-weight:600; color:#276749;">
+                                    Potential savings: ${savingsLow}–${savingsHigh}h per week from this category alone
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Redirect savings section
+            html += `
+                <div class="redirect-section">
+                    <h3>Where to Redirect Your Saved Time</h3>
+                    <p>The goal isn't just to work faster – it's to work on the things that matter most.</p>
+                    <div class="redirect-item">
+                        <span class="redirect-icon"></span>
+                        <span>More classroom visits and learning walks (currently ${totals['classroom']?.toFixed(1) || '0.0'}h)</span>
+                    </div>
+                    <div class="redirect-item">
+                        <span class="redirect-icon"></span>
+                        <span>More time at the gate, playground, and around the school (currently ${totals['playground']?.toFixed(1) || '0.0'}h)</span>
+                    </div>
+                    <div class="redirect-item">
+                        <span class="redirect-icon"></span>
+                        <span>More strategic thinking and planning (currently ${totals['strategic']?.toFixed(1) || '0.0'}h)</span>
+                    </div>
+                    <div class="redirect-item">
+                        <span class="redirect-icon"></span>
+                        <span>Protecting your personal time and wellbeing (currently ${totals['personal']?.toFixed(1) || '0.0'}h)</span>
+                    </div>
+                </div>
+            `;
+
+            // Quick Start section
+            if (topConsumers.length > 0) {
+                const quickStarts = topConsumers.slice(0, 3).map(([id]) => {
+                    const cat = categories.find(c => c.id === id);
+                    const db = aiSuggestionsDB[id];
+                    return { cat, suggestion: db.suggestions[0] };
+                });
+
+                html += `
+                    <div class="quick-start-section">
+                        <h3>Your 3-Step Quick Start</h3>
+                        <p style="font-size:0.9rem; color:#718096; margin-bottom:16px;">Start here this week. Pick one and try it tomorrow.</p>
+                `;
+
+                quickStarts.forEach((qs, i) => {
+                    html += `
+                        <div class="quick-start-step">
+                            <div class="quick-start-num">${i + 1}</div>
+                            <div class="quick-start-content">
+                                <h4>${qs.suggestion.title}</h4>
+                                <p>${qs.suggestion.description.substring(0, 120)}...</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            }
+
+            // Export button
+            html += `
+                <div class="button-group" style="margin-bottom:16px;">
+                    <button class="btn-primary" onclick="exportInsightsReport()">Export AI Insights Report</button>
+                </div>
+            `;
+
+            // Disclaimer
+            html += `
+                <div class="insights-disclaimer">
+                    These suggestions are based on your logged time patterns. Estimated savings will vary depending on your context, AI experience, and the specific tasks within each category.
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function renderLockedInsights(daysLogged) {
+            let dots = '';
+            for (let i = 0; i < 5; i++) {
+                dots += `<div class="insights-progress-dot ${i < daysLogged ? 'filled' : ''}">${i < daysLogged ? 'âœ“' : (i + 1)}</div>`;
+            }
+
+            return `
+                <div class="card">
+                    <div class="insights-locked">
+                        <div class="lock-icon"></div>
+                        <h3>Keep Logging to Unlock AI Insights</h3>
+                        <p>Log at least 3 days of time data to unlock your personalised AI action plan. The more days you log, the more accurate your recommendations will be.</p>
+                        <div class="insights-progress">${dots}</div>
+                        <p style="font-size:0.85rem; color:#a0aec0;">${daysLogged} of 3 days minimum (5 recommended)</p>
+                        <button class="btn-primary" onclick="showView('log')" style="margin-top:16px;">Continue Logging</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function exportInsightsReport() {
+            const daysLogged = getDaysWithData();
+            const totals = {};
+            categories.forEach(cat => totals[cat.id] = 0);
+            Object.values(data.entries).forEach(entries => {
+                entries.forEach(entry => {
+                    totals[entry.category] = (totals[entry.category] || 0) + entry.duration;
+                });
+            });
+
+            const totalHours = Object.values(totals).reduce((sum, val) => sum + val, 0);
+            const reducibleCategories = Object.entries(totals)
+                .filter(([id, hours]) => {
+                    const db = aiSuggestionsDB[id];
+                    return hours > 0 && db && !db.isVisible && !db.isStrategic && !db.isPersonal;
+                })
+                .sort((a, b) => b[1] - a[1]);
+
+            let totalSavingsLow = 0;
+            let totalSavingsHigh = 0;
+            reducibleCategories.forEach(([id, hours]) => {
+                const db = aiSuggestionsDB[id];
+                if (db && db.savingsRange) {
+                    totalSavingsLow += hours * (db.savingsRange[0] / 100);
+                    totalSavingsHigh += hours * (db.savingsRange[1] / 100);
+                }
+            });
+
+            const scaleFactor = 1;
+
+            let report = `TAKE BACK 5 - AI INSIGHTS REPORT
+==================================
+Generated: ${new Date().toLocaleDateString()}
+Based on ${daysLogged} days of time audit data
+
+ESTIMATED WEEKLY TIME SAVINGS WITH AI
+--------------------------------------
+${(totalSavingsLow * scaleFactor).toFixed(1)}–${(totalSavingsHigh * scaleFactor).toFixed(1)} hours per week
+
+YOUR TOP TIME CONSUMERS & AI SOLUTIONS
+---------------------------------------
+`;
+
+            reducibleCategories.slice(0, 4).forEach(([id, hours]) => {
+                const cat = categories.find(c => c.id === id);
+                const db = aiSuggestionsDB[id];
+                if (!cat || !db) return;
+
+                const pct = ((hours / totalHours) * 100).toFixed(0);
+                report += `\n${cat.name}: ${hours.toFixed(1)}h (${pct}% of your week)\n`;
+                report += `   Potential savings: ${(hours * db.savingsRange[0] / 100).toFixed(1)}–${(hours * db.savingsRange[1] / 100).toFixed(1)}h\n`;
+
+                db.suggestions.forEach(s => {
+                    report += `   â€¢ ${s.title}: ${s.description}\n`;
+                    if (s.tools.length > 0) report += `     Tools: ${s.tools.join(', ')}\n`;
+                    report += `     Time saved: ${s.timeSaved}\n`;
+                });
+            });
+
+            report += `
+YOUR QUICK START PLAN
+---------------------
+`;
+
+            reducibleCategories.slice(0, 3).forEach(([id], i) => {
+                const cat = categories.find(c => c.id === id);
+                const db = aiSuggestionsDB[id];
+                if (!cat || !db) return;
+                report += `${i + 1}. ${db.suggestions[0].title}\n   ${db.suggestions[0].description}\n\n`;
+            });
+
+            report += `WHERE TO REDIRECT SAVED TIME
+-----------------------------
+â€¢ More classroom visits and learning walks
+â€¢ More time at the gate, playground, and around the school
+â€¢ More strategic thinking and planning time
+â€¢ Protecting your personal time and wellbeing
+
+---
+Take Back 5 Time Audit Tool
+AI Insights Report | Take Back 5 | Andy Rankin
+`;
+
+            // Use the same smart export approach as main report
+            smartExportText(report);
+        }
+
+        async function smartExportText(report) {
+            if (navigator.share) {
+                try {
+                    const blob = new Blob([report], { type: 'text/plain' });
+                    const file = new File([blob], 'Take-Back-5-AI-Insights.txt', { type: 'text/plain' });
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({ title: 'Take Back 5 - AI Insights Report', files: [file] });
+                        return;
+                    }
+                } catch (err) { if (err.name === 'AbortError') return; }
+                try {
+                    await navigator.share({ title: 'Take Back 5 - AI Insights Report', text: report });
+                    return;
+                } catch (err) { if (err.name === 'AbortError') return; }
+            }
+            try {
+                await navigator.clipboard.writeText(report);
+                showExportModal('clipboard');
+                return;
+            } catch (err) {}
+            fallbackExport(report);
+        }
+
+        function fallbackExport(report) {
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Take-Back-5-AI-Insights.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            showExportModal('download');
+        }
+
         // Initialize
         initWorkTimeSelects();
         updateWorkTimesUI();
@@ -2067,7 +2897,7 @@ Created by Andy Rankin
         (function() {
             const saved = localStorage.getItem('takeBack5TimeAudit');
             if (saved) {
-                document.getElementById('save-status').textContent = '✓ Data loaded from previous session';
+                document.getElementById('save-status').textContent = 'âœ“ Data loaded from previous session';
             }
         })();
     </script>
